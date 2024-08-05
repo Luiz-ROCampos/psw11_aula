@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block 'head' %}
 
-<link rel='stylesheet' href='{% static "usuarios/css/usuarios.css" %}'
+<link rel="stylesheet" href="{% static 'usuarios/css/usuarios.css' %}">
+
 {% endblock 'head' %}
 
 {% block 'body' %}
@@ -15,29 +15,25 @@
         <div class="col-md-10 d-flex justify-content-center bg-color-dark form-auth">
             <div class="container-form">
                 <h1 class="text-logo">START.SE</h1>
+                <h1>Logar</h1>
                 {% if messages %}
-                    <br>
                     {% for message in messages %}
                         <section class="alert {{message.tags}}">
                             {{message}}
+
                         </section>
                     {% endfor %}
                 {% endif %}
-                <h1>Cadastre-se</h1>
                 <br>
-                <form action="{% url "cadastro" %}" method="POST"> {% csrf_token %}
-                    
+                <form action="{% url "logar" %}" method="POST"> {% csrf_token %}
                     <label>Username</label>
                     <input type="text" class="form-control input-pers" name="username" placeholder="Digite seu username">
                     <br>
                     <label>Senha</label>
                     <input type="password" class="form-control input-pers" name="senha" placeholder="Digite sua senha">
-                    <br>
-                    <label>Confirmar senha</label>
-                    <input type="password" class="form-control input-pers" name="confirmar_senha" placeholder="Confirme sua senha">
                     <div class="centralizar">
-                        <input type="submit" class="btn btn-indigo" value="Cadastrar">
-                        <a href="{% url "logar" %}" class="texto">Já possuo uma conta</a>
+                        <input type="submit" class="btn btn-indigo" value="Logar">
+                        <a href="{% url "cadastro" %}" class="texto">Não possuo uma conta</a>
                     </div>
                 </form>
             </div>
