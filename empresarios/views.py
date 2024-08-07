@@ -1,7 +1,7 @@
 from re import split
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from .models import Empresas, Documento
+from .models import Empresas, Documento, Metricas
 from django.contrib.messages import constants
 from django.contrib import messages
 
@@ -112,5 +112,18 @@ def excluir_doc(request, id):
      messages.add_message(request, constants.SUCCESS, 'Documento excluido com sucesso.')
      return redirect(f'/empresarios/empresa/{documento.empresa.id}')
 
+def add_metrica(request, id):
+    empresa = Empresas.objects.get(id=id)
 
+    titulo = request.POST.get('titulo')
+    valor = request.POST.get('valor')
+
+    metrica = Metricas(
+        empresa=empresa,
+        titulo=titulo,
+        valor=valor
+    )
+    metrica.save()
+    messages.add_message(request, constants.SUCCESS, "Métrica cadastrada com sucesso.")
+    return redirect(f'/empresarios/empresa/{empresa.id}')
 
