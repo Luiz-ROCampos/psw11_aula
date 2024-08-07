@@ -1,6 +1,7 @@
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.utils.safestring import mark_safe
 # Create your models here.
 
 class Empresas(models.Model):
@@ -40,3 +41,12 @@ class Empresas(models.Model):
 
     def __str__(self):
         return f'{self.user.username} | {self.nome}'
+    
+    @property
+    def status(self):
+        if datetime.now().date() > self.data_final_captacao:
+            return mark_safe('<span class="badge text-bg-success">Capitalização Finalizada</span>')
+        else:
+            return mark_safe('<span class="badge text-bg-primary">Em captação</span>')
+        
+    
