@@ -101,3 +101,16 @@ def add_doc(request, id):
     
     return  redirect(f'/empresarios/empresa/{id}')
 
+def excluir_doc(request, id):
+     documento = Documento.objects.get(id=id)
+
+     if documento.empresa.user != request.user:
+        messages.add_message(request, constants.ERROR, "Esse documento não é seu")
+        return redirect(f'/empresarios/empresa/{empresa.id}')
+     
+     documento.delete()
+     messages.add_message(request, constants.SUCCESS, 'Documento excluido com sucesso.')
+     return redirect(f'/empresarios/empresa/{documento.empresa.id}')
+
+
+
