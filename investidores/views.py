@@ -1,7 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from empresarios.models import Empresas,Documento
-
+from .models import PropostaInvestimento
+from django.contrib import messages
+from django.contrib.messages import constants
 # Create your views here.
 
 def sugestao(request):
@@ -35,3 +37,33 @@ def ver_empresa(request, id):
     documentos = Documento.objects.filter(empresa=empresa)
     #TODO: Filtrar as metricas dinamicamente
     return render(request, 'ver_empresa.html', {'empresa': empresa, 'documentos': documentos})
+
+def realizar_proposta(request, id):
+    valor = request.POST.get('valor')
+    percentual = request.POST.get('percentual')
+    empresa = Empresas.objects.get(id=id)
+
+    propostas_aceitas = PropostaInvestimento.objects.filter(empresa=empresa).filter(status='PA')
+    total = 0
+    for pa in propostas_aceitas:
+        total= total + pa.percentual
+    
+    if total + float(percentual) >empresa.percentual_equity:
+        messages.add_message(request, constants.WARNING, 'O percentual supera o percentual restante para investimento.')
+        return redirect(f'/investidores/ver_empresa/{id}')
+    
+    valuation = (100 * int(valor)) / int(percentual)
+
+    if valuation < (int(empresa.valuation/2)):
+        messages.add_message(request, constants.WARNING, f'O valor da sua proposta foi {valuation} e o minimo é {empresa.valuation}.')
+        return redirect(f'/investidores/ver_empresa/{id}')
+    pi = PropostaInvestimento(
+        valor=valor,
+        percentual=percentual,
+        empresa=empresa,
+        investidor=request.user
+    )
+    pi.save()
+    return redirect(f'/investidores/assinar_contrato/{pi.id}')
+
+    
