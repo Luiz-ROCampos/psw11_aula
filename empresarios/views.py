@@ -1,6 +1,8 @@
 from re import split
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+
+from investidores.models import PropostaInvestimento
 from .models import Empresas, Documento, Metricas
 from django.contrib.messages import constants
 from django.contrib import messages
@@ -70,7 +72,17 @@ def empresa(request, id):
     
     if request.method == "GET":
         documentos = Documento.objects.filter(empresa=empresa)
-        return render(request, 'empresa.html', {'empresa': empresa, 'documentos': documentos})
+        proposta_investimentos = PropostaInvestimento.objects.filter(empresa=empresa)
+        proposta_investimentos_enviada = proposta_investimentos.filter(status='PE')
+        percentual_vendido = 0
+        for pi in proposta_investimentos:
+            if pi.status == 'PA':
+                percentual_vendido += pi.percentual
+        
+        total_captado = sum(proposta_investimentos.filter(status='PA').values_list('valor', flat=True))
+        valuation_atual = (100 * float(total_captado)) / float(percentual_vendido) if percentual_vendido != 0 else 0
+
+        return render(request, 'empresa.html', {'empresa': empresa, 'documentos': documentos, 'proposta_investimentos_enviada': proposta_investimentos_enviada, 'percentual_vendido': int(percentual_vendido), 'total_captado': total_captado, 'valuation_atual': valuation_atual})
 
 def add_doc(request, id):
     empresa = Empresas.objects.get(id=id)

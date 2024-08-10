@@ -48,7 +48,7 @@ def realizar_proposta(request, id):
     for pa in propostas_aceitas:
         total= total + pa.percentual
     
-    if total + float(percentual) >empresa.percentual_equity:
+    if total + float(percentual) > empresa.percentual_equity:
         messages.add_message(request, constants.WARNING, 'O percentual supera o percentual restante para investimento.')
         return redirect(f'/investidores/ver_empresa/{id}')
     
@@ -84,5 +84,18 @@ def assinar_contrato(request, id):
         messages.add_message(request, constants.SUCCESS, f'Contrato assinado com sucesso, sua proposta foi enviada a empresa.')
         return redirect(f'/investidores/ver_empresa/{pi.empresa.id}')
         
-    
+def gerenciar_proposta(request, id):
+    acao = request.GET.get('acao')
+    pi = PropostaInvestimento.objects.get(id=id)
+
+    if acao == 'aceitar':
+        messages.add_message(request, constants.SUCCESS, 'Proposta aceita')
+        pi.status = 'PA'
+    elif acao == 'recusar':
+        messages.add_message(request, constants.SUCCESS, 'Proposta recusada')
+        pi.status = 'PR'
+
+
+    pi.save()
+    return redirect(f'/empresarios/empresa/{pi.empresa.id}')    
 
