@@ -1,8 +1,21 @@
-Esse projeto fui desenvolvido no intensivão da Pythonando com o Caio.
+**Projeto: Start-SE**
 
-A aplicação web tem como objetivo conectar empresários aos investidores.
+### Objetivo Principal:
+- Conectar investidores com empresários.
 
-Primeiro passo é o app usuários com tela de cadastro do usuário, login e cadastro de empresa.
-
-<img src="img/usuarios.png"/>
-
+### Objetivos:
+- Todos podem se cadastrar informando nome e senha.
+- Após fazer login, o usuário pode:
+  - Cadastrar uma empresa na seção "Quero Captar".
+  - Listar as empresas disponíveis para investimento na seção "Marketplace".
+- Empresários podem:
+  - Visualizar os investidores interessados em sua empresa, incluindo o valor que cada um deseja investir.
+  - Decidir se aceita ou recusa as propostas de investimento.
+  - Acompanhar informações como:
+    - Total do valor estimado da empresa.
+    - Total disponível para captação.
+    - Total já captado.
+  - Enviar arquivos relacionados à empresa.
+  - Definir métricas específicas para a empresa.
+- Investidores podem:
+  *(A seção sobre investidores precisa ser complementada com mais detalhes, se necessário).*
